@@ -1,7 +1,11 @@
 package com.down.ui;
+
 import java.io.*;
+import java.security.KeyStore;
+import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public final class DownloadHistory {
     private static final String historyInfo = "Xdownloader.info";

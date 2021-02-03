@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Downloader.iml" filepath="$PROJECT_DIR$/Downloader.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Huabian/Huabian.iml" filepath="$PROJECT_DIR$/Huabian/Huabian.iml" />
     </modules>
   </component>
 </project>

@@ -3,12 +3,12 @@ package com.down.ui;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
-import com.xjava.down.XDownload;
-import com.xjava.down.config.XConfig;
-import com.xjava.down.core.HttpDownload;
-import com.xjava.down.core.XDownloadRequest;
-import com.xjava.down.data.Headers;
-import com.xjava.down.data.Params;
+import com.x.down.XDownload;
+import com.x.down.config.XConfig;
+import com.x.down.core.HttpDownload;
+import com.x.down.core.XDownloadRequest;
+import com.x.down.data.Headers;
+import com.x.down.data.Params;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -75,9 +75,9 @@ public class Downloader extends JFrame {
         //超时时间
         spinnerOutTime.setModel(new SpinnerNumberModel(60, 5, Integer.MAX_VALUE, 1));
         //多线程核心数
-        spinnerMulitCore.setModel(new SpinnerNumberModel(5, 0, 100, 1));
+        spinnerMulitCore.setModel(new SpinnerNumberModel(10, 0, 100, 1));
         //下载的最大块
-        spinnerDownMax.setModel(new SpinnerNumberModel(10, 1, 999, 1));
+        spinnerDownMax.setModel(new SpinnerNumberModel(5, 1, 999, 1));
         //下载的最小块
         spinnerDownMin.setModel(new SpinnerNumberModel(100, 10, 1000, 1));
         //保存路径
@@ -218,9 +218,9 @@ public class Downloader extends JFrame {
                 .setAutoRetryTimes((Integer) spinnerRetryTime.getModel().getValue())
                 .setAutoRetryInterval((Integer) spinnerRetryInterval.getModel().getValue())
                 .setConnectTimeOut((Integer) spinnerOutTime.getModel().getValue() * 1000)
-                .setMultiThreadCount((Integer) spinnerMulitCore.getModel().getValue())
-                .setMultiThreadMaxDownloadSize((Integer) spinnerDownMax.getModel().getValue() * 1024 * 1024)
-                .setMultiThreadMinDownloadSize((Integer) spinnerDownMin.getModel().getValue() * 1024)
+                .setDownloadMultiThreadSize((Integer) spinnerMulitCore.getModel().getValue())
+                .setMaxDownloadBlockSize((Integer) spinnerDownMax.getModel().getValue() * 1024 * 1024)
+                .setMinDownloadBlockSize((Integer) spinnerDownMin.getModel().getValue() * 1024)
                 .setUseMultiThread(cbMulti.isSelected())
                 .setUseAutoRetry(cbRetry.isSelected())
                 .setUseBreakpointResume(cbResume.isSelected())
@@ -254,7 +254,7 @@ public class Downloader extends JFrame {
         if (inputText.getText().equals(hintUrl) || !inputText.getText().startsWith("http")) {
             JOptionPane.showConfirmDialog(this, "请输入下载地址", "提醒!", JOptionPane.OK_CANCEL_OPTION);
         } else {
-            XDownloadRequest httpDownload = (XDownloadRequest) getDown().delect();
+            XDownloadRequest httpDownload = (XDownloadRequest) getDown().delete();
             DownloadingUi.show(httpDownload, XDownload.get());
         }
     }

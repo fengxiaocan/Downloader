@@ -3,20 +3,21 @@ package com.down.ui;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
-import com.xjava.down.XDownload;
-import com.xjava.down.base.IDownloadRequest;
-import com.xjava.down.config.XConfig;
-import com.xjava.down.core.HttpDownload;
-import com.xjava.down.core.XDownloadRequest;
-import com.xjava.down.listener.OnDownloadConnectListener;
-import com.xjava.down.listener.OnDownloadListener;
-import com.xjava.down.listener.OnProgressListener;
-import com.xjava.down.listener.OnSpeedListener;
+import com.x.down.XDownload;
+import com.x.down.base.IDownloadRequest;
+import com.x.down.core.HttpDownload;
+import com.x.down.core.XDownloadRequest;
+import com.x.down.listener.OnDownloadConnectListener;
+import com.x.down.listener.OnDownloadListener;
+import com.x.down.listener.OnProgressListener;
+import com.x.down.listener.OnSpeedListener;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.text.DecimalFormat;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class DownloadingUi extends JFrame {
     private HttpDownload httpDownload;
@@ -67,7 +68,7 @@ public class DownloadingUi extends JFrame {
                 int confirmDialog = JOptionPane.showConfirmDialog(contentPane, "是否重新下载?", "提醒!", JOptionPane.YES_NO_OPTION);
                 //如果这个整数等于JOptionPane.YES_OPTION，则说明你点击的是“确定”按钮，则允许继续操作，否则结束
                 if (confirmDialog == JOptionPane.YES_OPTION) {
-                    httpDownload.delect();
+                    httpDownload.delete();
                     httpDownload.start();
                 }
             }
@@ -145,6 +146,12 @@ public class DownloadingUi extends JFrame {
                         buttonPause.setEnabled(false);
                         buttonCancel.setEnabled(false);
                         buttonRestart.setEnabled(true);
+                        new Timer("timer").schedule(new TimerTask() {
+                            @Override
+                            public void run() {
+                                onCancel();
+                            }
+                        }, 5000);
                     }
 
                     @Override
@@ -187,24 +194,24 @@ public class DownloadingUi extends JFrame {
             size = len + "B";
         } else if (len < 10 * 1024) {
             // [0, 10KB)，保留两位小数
-            size = len * 100 / 1024 / (float) 100 + "KB";
+            size = len * 100 / 1024 / 100f + "KB";
         } else if (len < 100 * 1024) {
             // [10KB, 100KB)，保留一位小数
-            size = len * 10 / 1024 / (float) 10 + "KB";
+            size = len * 10 / 1024 / 10f + "KB";
         } else if (len < 1024 * 1024) {
             // [100KB, 1MB)，个位四舍五入
             size = len / 1024 + "KB";
         } else if (len < 10 * 1024 * 1024) {
             // [1MB, 10MB)，保留两位小数
             if (keepZero) {
-                size = formatKeepTwoZero.format(len * 100 / 1024 / 1024 / (float) 100) + "MB";
+                size = formatKeepTwoZero.format(len * 100 / 1024 / 1024 / 100f) + "MB";
             } else {
                 size = len * 100 / 1024 / 1024 / (float) 100 + "MB";
             }
         } else if (len < 100 * 1024 * 1024) {
             // [10MB, 100MB)，保留一位小数
             if (keepZero) {
-                size = formatKeepOneZero.format(len * 10 / 1024 / 1024 / (float) 10) + "MB";
+                size = formatKeepOneZero.format(len * 10 / 1024 / 1024 / 10f) + "MB";
             } else {
                 size = len * 10 / 1024 / 1024 / (float) 10 + "MB";
             }
@@ -213,7 +220,7 @@ public class DownloadingUi extends JFrame {
             size = len / 1024 / 1024 + "MB";
         } else {
             // [1GB, ...)，保留两位小数
-            size = len * 100 / 1024 / 1024 / 1024 / (float) 100 + "GB";
+            size = len * 100 / 1024 / 1024 / 1024 / 100f + "GB";
         }
         return size;
     }
